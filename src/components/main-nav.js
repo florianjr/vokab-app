@@ -1,4 +1,4 @@
-import {NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import React from "react";
 
 const MainNav = () => (
@@ -26,6 +26,14 @@ const MainNav = () => (
       activeClassName="router-link-exact-active"
     >
       External API
+    </NavLink>
+    <NavLink
+      to="/words"
+      exact
+      className="nav-link"
+      activeClassName="router-link-exact-active"
+    >
+      Wörter
     </NavLink>
   </div>
 );
