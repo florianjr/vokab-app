@@ -12,7 +12,7 @@ import {
   Main,
   Button,
 } from "grommet";
-import { Add } from "grommet-icons";
+import { Add, FormTrash, Trash } from "grommet-icons";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 
@@ -40,6 +40,7 @@ const Words = () => {
       const responseData = await response.json();
 
       setWords(responseData.words);
+      console.log(responseData.words);
       setVocabulary(responseData.vocabulary);
       console.log(responseData.vocabulary);
       setPlainLanguageCode(responseData.vocabulary.plainLanguage.code);
@@ -48,6 +49,26 @@ const Words = () => {
       );
     } catch (error) {
       console.log(error.message);
+    }
+  };
+
+  const removeWord = async (wordId, index) => {
+    try {
+      const token = await getAccessTokenSilently({
+        audience: serverUrl,
+      });
+      const response = await fetch(
+        `${serverUrl}/api/vocabulary/${id}/${wordId}/removeWord`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const newWords = [...words];
+      newWords.splice(index, 1);
+      setWords(newWords);
+    } catch (e) {
+      console.log(e.message);
     }
   };
 
@@ -78,7 +99,7 @@ const Words = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {words.map((w) => (
+            {words.map((w, index) => (
               <TableRow>
                 <TableCell>{w.plain}</TableCell>
                 <TableCell>
@@ -86,6 +107,14 @@ const Words = () => {
                 </TableCell>
                 <TableCell>
                   {t(`word_category_${w.wordCategory.name}`)}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => {
+                      removeWord(w.id, index);
+                    }}
+                    icon={<FormTrash />}
+                  />
                 </TableCell>
               </TableRow>
             ))}
