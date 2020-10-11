@@ -11,7 +11,7 @@ import {
   CardBody,
   Button,
 } from "grommet";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Add } from "grommet-icons";
 
@@ -21,6 +21,7 @@ const HomeContent = () => {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const { getAccessTokenSilently, user } = useAuth0();
+  const history = useHistory();
 
   const getAllVocabularies = async () => {
     try {
@@ -67,15 +68,17 @@ const HomeContent = () => {
           </Card>
         ) : (
           vocabularies.map((v) => (
-            <Box pad="large">
-              <Card pad="large" background="brand">
-                <CardHeader>
-                  <Heading level="3">{v.name}</Heading>
-                </CardHeader>
-                <CardBody>
-                  {t("created")}: {v.createdAt}
-                </CardBody>
-              </Card>
+            <Box pad="medium">
+              <Link to={`/vocabulary/${v.id}`}>
+                <Card pad="large" background="brand">
+                  <CardHeader>
+                    <Heading level="3">{v.name}</Heading>
+                  </CardHeader>
+                  <CardBody>
+                    {t("created")}: {v.createdAt}
+                  </CardBody>
+                </Card>
+              </Link>
             </Box>
           ))
         )}
