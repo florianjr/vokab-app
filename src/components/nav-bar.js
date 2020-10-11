@@ -19,7 +19,6 @@ const NavBar = () => {
         <Box>
           <Button icon={<FlagIcon code="de" />} onClick={() => i18n.changeLanguage("de")}></Button>
           <Button icon={<FlagIcon code="gb" />} onClick={() => i18n.changeLanguage("en")}></Button>
-          <Button icon={<FlagIcon code="fr" />} onClick={() => i18n.changeLanguage("fr")}></Button>
         </Box>
       }></DropButton>
     </Header>

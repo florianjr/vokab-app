@@ -529,7 +529,7 @@ const App = () => {
         <NavBar />
         <Main pad="large">
           <Switch>
-            <Route path="/" exact component={Home} />
+            <Route path="/" exact component={Home}/>
             <ProtectedRoute path="/profile" component={Profile} />
             <ProtectedRoute path="/external-api" component={ExternalApi} />
             <ProtectedRoute exact path="/vocabulary/:id" component={Vocabulary} />

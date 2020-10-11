@@ -1,13 +1,20 @@
 import React, { Fragment } from "react";
+import { Main, Heading, Paragraph } from "grommet";
+import { useAuth0 } from "@auth0/auth0-react";
+import { HomeContent } from "../components";
+import Landing from "./landing";
 
-import { Hero, HomeContent } from "../components";
+const Home = () => {
 
-const Home = () => (
-  <Fragment>
-    <Hero />
-    <hr />
-    <HomeContent />
-  </Fragment>
-);
+  const {isAuthenticated} = useAuth0();
+
+  return (
+    <Fragment>
+      {isAuthenticated
+      ? <HomeContent/>
+      : <Landing/>}
+    </Fragment>
+  );
+};
 
 export default Home;

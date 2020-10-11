@@ -1,93 +1,59 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect, Fragment } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
-const HomeContent = () => (
-  <div className="next-steps">
-    <h2 className="my-5 text-center">What can I do next?</h2>
+import { Main, Heading, Paragraph, Box, Card, CardHeader, CardBody, Button } from "grommet";
+import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next";
+import { Add } from "grommet-icons";
 
-    <div className="row">
-      <div className="col-md-5 mb-4">
-        <h6 className="mb-3">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://auth0.com/docs/connections"
-          >
-            <FontAwesomeIcon icon={faLink} className="mr-2" />
-            Configure other identity providers
-          </a>
-        </h6>
-        <p>
-          Auth0 supports social providers as Facebook, Twitter, Instagram and
-          100+, Enterprise providers as Microsoft Office 365, Google Apps,
-          Azure, and more. You can also use any OAuth2 Authorization Server.
-        </p>
-      </div>
+const HomeContent = () => {
+  const { t } = useTranslation();
+  const [vocabularies, setVocabularies] = useState([])
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-      <div className="col-md" />
+  const { getAccessTokenSilently, user } = useAuth0();
 
-      <div className="col-md-5 mb-4">
-        <h6 className="mb-3">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://auth0.com/docs/multifactor-authentication"
-          >
-            <FontAwesomeIcon icon={faLink} className="mr-2" />
-            Enable Multi-Factor Authentication
-          </a>
-        </h6>
-        <p>
-          Add an extra layer of security by enabling Multi-factor
-          Authentication, requiring your users to provide more than one piece of
-          identifying information. Push notifications, authenticator apps, SMS,
-          and DUO Security are supported.
-        </p>
-      </div>
-    </div>
+  const getAllVocabularies = async () => {
+    try {
+      const token = await getAccessTokenSilently({
+        audience: serverUrl
+      })
+      const response = await fetch(`${serverUrl}/api/vocabulary/`, { headers: { Authorization: `Bearer ${token}` } });
+      const responseData = await response.json();
+      setVocabularies(responseData)
+    } catch (error) {
+      console.log(error.message)
+    }
+  };
 
-    <div className="row">
-      <div className="col-md-5 mb-4">
-        <h6 className="mb-3">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://auth0.com/docs/anomaly-detection"
-          >
-            <FontAwesomeIcon icon={faLink} className="mr-2" />
-            Anomaly Detection
-          </a>
-        </h6>
-        <p>
-          Auth0 can detect anomalies and stop malicious attempts to access your
-          application. Anomaly detection can alert you and your users of
-          suspicious activity, as well as block further login attempts.
-        </p>
-      </div>
+  useEffect(() => {
+    getAllVocabularies()
+  }, [])
 
-      <div className="col-md" />
-
-      <div className="col-md-5 mb-4">
-        <h6 className="mb-3">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://auth0.com/docs/rules"
-          >
-            <FontAwesomeIcon icon={faLink} className="mr-2" />
-            Learn About Rules
-          </a>
-        </h6>
-        <p>
-          Rules are JavaScript functions that execute when a user authenticates
-          to your application. They run once the authentication process is
-          complete, and you can use them to customize and extend Auth0's
-          capabilities.
-        </p>
-      </div>
-    </div>
-  </div>
-);
+  return (
+    <Main pad="large">
+      <Heading level="1">{t("Hello")}, {user.given_name}!</Heading>
+      <Paragraph>{t("Today is a good day to learn vocabulary.")}</Paragraph>
+      <Box direction="row" margin={{ "vertical": "medium" }}>
+        {vocabularies.length == 0
+          ?
+          <Card pad="large">
+            <CardHeader>{t("Let's get started by creating a new vocabulary!")}</CardHeader>
+            <Box align="center">
+              <CardBody pad="medium"><Link to="/newVocabulary"><Button primary icon={<Add />} label={t("vocabulary_new")}></Button></Link></CardBody>
+            </Box>
+          </Card>
+          :vocabularies.map((v) => (
+            <Box pad="large">
+              <Card pad="large" background="brand">
+                <CardHeader><Heading level="3">{v.name}</Heading></CardHeader>
+                <CardBody>{t("created")}: {v.createdAt}</CardBody>
+              </Card>
+            </Box>
+          ))}
+      </Box>
+    </Main>
+  );
+}
 
 export default HomeContent;

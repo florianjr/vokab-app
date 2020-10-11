@@ -15,7 +15,12 @@ const resources = {
             "word_category_adjective": "Adjektiv",
             "word_category_noun": "Nomen",
             "vocabulary": "Dein Vokabular",
-            "Here you can see your added words.": "Hier kannst du deine hinzugefügten Wörter sehen."
+            "vocabulary_new": "Vokabular erstellen",
+            "created": "Erstellt",
+            "Here you can see your added words.": "Hier kannst du deine hinzugefügten Wörter sehen.",
+            "Today is a good day to learn vocabulary.": "Heute ist ein guter Tag um Vokabeln zu lernen.",
+            "Let's get started by creating a new vocabulary!": "Hier sieht's aber leer aus! Lass uns ein neues Vokabular erstellen.",
+            "Hello": "Hallo"
         }
     },
     en: {
@@ -32,10 +37,15 @@ const resources = {
             "word_category_adjective": "Adjective",
             "word_category_noun": "Noun",
             "vocabulary": "Your vocabulary",
-            "Here you can see your added words.": "Here you can see your added words."
+            "vocabulary_new": "Create vocabulary",
+            "created": "Created",
+            "Here you can see your added words.": "Here you can see your added words.",
+            "Today is a good day to learn vocabulary.": "Today is a good day to study!",
+            "Let's get started by creating a new vocabulary!": "Let's get started by creating a new vocabulary!",
+            "Hello": "Hello"
         }
     },
-    fr: {
+    /*fr: {
         translation: {
             "form_submit": "Soumettre",
             "button_login": "Connecter",
@@ -49,9 +59,10 @@ const resources = {
             "word_category_adjective": "Adjectif",
             "word_category_noun": "Nom",
             "vocabulary": "Ton vocabulaire",
-            "Here you can see your added words.": "Vous pouvez voir ici les mots que vous avez ajoutés."
+            "Here you can see your added words.": "Vous pouvez voir ici les mots que vous avez ajoutés.",
+            "Hello": "Sâlut"
         }
-    }
+    }*/
 };
 
 i18n
