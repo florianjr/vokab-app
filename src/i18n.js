@@ -5,6 +5,8 @@ const resources = {
     de: {
         translation: {
             "form_submit": "Speichern",
+            "button_login": "Log in",
+            "button_logout": "Log out",
             "language_de": "Deutsch",
             "language_en": "Englisch",
             "language_fr": "Französisch",
@@ -19,6 +21,8 @@ const resources = {
     en: {
         translation: {
             "form_submit": "Submit",
+            "button_login": "Log in",
+            "button_logout": "Log out",
             "language_de": "German",
             "language_en": "English",
             "language_fr": "French",
@@ -34,6 +38,8 @@ const resources = {
     fr: {
         translation: {
             "form_submit": "Soumettre",
+            "button_login": "Connecter",
+            "button_logout": "Déconnecter",
             "language_de": "Allemand",
             "language_en": "Anglais",
             "language_fr": "Français",
