@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef, Fragment } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import {
   Heading,
@@ -13,8 +13,31 @@ import {
   Button,
 } from "grommet";
 import { Add, FormTrash, Trash } from "grommet-icons";
+import FlipMove from "react-flip-move";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
+
+const FunctionalWord = forwardRef((props, ref) => {
+  const { t } = useTranslation();
+
+  return (
+    <TableRow ref={ref}>
+      <TableCell>{props.plain}</TableCell>
+      <TableCell>
+        <strong>{props.translation}</strong>
+      </TableCell>
+      <TableCell>{t(`word_category_${props.wordCategoryName}`)}</TableCell>
+      <TableCell>
+        <Button
+          onClick={() => {
+            props.removeWord(props.wordId, props.index);
+          }}
+          icon={<FormTrash />}
+        />
+      </TableCell>
+    </TableRow>
+  );
+});
 
 const Words = () => {
   const [words, setWords] = useState([]);
@@ -99,25 +122,18 @@ const Words = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {words.map((w, index) => (
-              <TableRow>
-                <TableCell>{w.plain}</TableCell>
-                <TableCell>
-                  <strong>{w.translation}</strong>
-                </TableCell>
-                <TableCell>
-                  {t(`word_category_${w.wordCategory.name}`)}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => {
-                      removeWord(w.id, index);
-                    }}
-                    icon={<FormTrash />}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+            <FlipMove typeName={null}>
+              {words.map((w, index) => (
+                <FunctionalWord
+                  plain={w.plain}
+                  translation={w.translation}
+                  wordCategoryName={w.wordCategory.name}
+                  removeWord={removeWord}
+                  wordId={w.id}
+                  index={index}
+                />
+              ))}
+            </FlipMove>
           </TableBody>
         </Table>
       </Box>

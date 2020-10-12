@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import {
   Box,
@@ -8,6 +8,7 @@ import {
   TextInput,
   Select,
   Paragraph,
+  Heading,
 } from "grommet";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -74,41 +75,46 @@ const NewVocabulary = () => {
   }, []);
 
   return (
-    <Box align="center">
-      <Form
-        value={value}
-        onChange={(nextValue) => setValue(nextValue)}
-        onReset={() => setValue({})}
-        onSubmit={createVocabulary}
-      >
-        <FormField
-          name="name"
-          htmlfor="text-input-id"
-          label={t(`vocabulary_name`)}
+    <Fragment>
+      <Box align="center" pad="large">
+        <Heading>New Vocabulary</Heading>
+      </Box>
+      <Box align="center">
+        <Form
+          value={value}
+          onChange={(nextValue) => setValue(nextValue)}
+          onReset={() => setValue({})}
+          onSubmit={createVocabulary}
         >
-          <TextInput id="text-input-id" name="name" />
-        </FormField>
-        <FormField name="plainLanguage" label={t(`language_plain`)}>
-          <Select
-            name="plainLanguage"
-            options={availableLanguageOptions}
-            labelKey="l"
-            valueKey="v"
-          ></Select>
-        </FormField>
-        <FormField name="translatedLanguage" label={t(`language_translated`)}>
-          <Select
-            name="translatedLanguage"
-            options={availableLanguageOptions}
-            labelKey="l"
-            valueKey="v"
-          ></Select>
-        </FormField>
-        <Box direction="row" gap="medium">
-          <Button type="submit" primary label={t("form_submit")} />
-        </Box>
-      </Form>
-    </Box>
+          <FormField
+            name="name"
+            htmlfor="text-input-id"
+            label={t(`vocabulary_name`)}
+          >
+            <TextInput id="text-input-id" name="name" />
+          </FormField>
+          <FormField name="plainLanguage" label={t(`language_plain`)}>
+            <Select
+              name="plainLanguage"
+              options={availableLanguageOptions}
+              labelKey="l"
+              valueKey="v"
+            ></Select>
+          </FormField>
+          <FormField name="translatedLanguage" label={t(`language_translated`)}>
+            <Select
+              name="translatedLanguage"
+              options={availableLanguageOptions}
+              labelKey="l"
+              valueKey="v"
+            ></Select>
+          </FormField>
+          <Box direction="row" gap="medium">
+            <Button type="submit" primary label={t("form_submit")} />
+          </Box>
+        </Form>
+      </Box>
+    </Fragment>
   );
 };
 
