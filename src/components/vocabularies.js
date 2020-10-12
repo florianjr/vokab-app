@@ -28,7 +28,7 @@ export default function Vocabularies(props) {
         </CardHeader>
         <Box align="center">
           <CardBody pad="medium">
-            <Link to="/newVocabulary">
+            <Link to="/vocabulary/new">
               <Button
                 primary
                 icon={<Add />}
