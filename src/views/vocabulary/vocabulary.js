@@ -16,6 +16,8 @@ import { Add, FormTrash, Trash } from "grommet-icons";
 import FlipMove from "react-flip-move";
 import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
+import useSecureRequest from "../../hooks/useSecureRequest";
+import { Loading } from "../../components";
 
 const FunctionalWord = forwardRef((props, ref) => {
   const { t } = useTranslation();
@@ -41,9 +43,6 @@ const FunctionalWord = forwardRef((props, ref) => {
 
 const Words = () => {
   const [words, setWords] = useState([]);
-  const [vocabulary, setVocabulary] = useState({});
-  const [plainLanguageCode, setPlainLanguageCode] = useState("");
-  const [translatedLanguageCode, setTranslatedLanguageCode] = useState("");
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   const { getAccessTokenSilently } = useAuth0();
@@ -51,29 +50,7 @@ const Words = () => {
 
   const { id } = useParams();
 
-  const getVocabulary = async () => {
-    try {
-      const token = await getAccessTokenSilently({
-        audience: "http://localhost:1871",
-      });
-      const response = await fetch(`${serverUrl}/api/vocabulary/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const responseData = await response.json();
-
-      setWords(responseData.words);
-      console.log(responseData.words);
-      setVocabulary(responseData.vocabulary);
-      console.log(responseData.vocabulary);
-      setPlainLanguageCode(responseData.vocabulary.plainLanguage.code);
-      setTranslatedLanguageCode(
-        responseData.vocabulary.translatedLanguage.code
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  const { data, loading, error } = useSecureRequest(`/vocabulary/${id}`);
 
   const removeWord = async (wordId, index) => {
     try {
@@ -96,48 +73,58 @@ const Words = () => {
   };
 
   useEffect(() => {
-    getVocabulary();
-  }, []);
+    setWords(data.words);
+  }, [data.words]);
 
   return (
-    <Box align="center">
-      <Box align="center">
-        <Heading>
-          {t("vocabulary")}: {vocabulary.name}
-        </Heading>
-        <Paragraph>{t("Here you can see your added words.")}</Paragraph>
-      </Box>
-      <Box align="center" margin="medium">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell>{t(`language_${plainLanguageCode}`)}</TableCell>
-              <TableCell>{t(`language_${translatedLanguageCode}`)}</TableCell>
-              <TableCell>{t("word_category")}</TableCell>
-              <TableCell>
-                <Link to={"/vocabulary/" + vocabulary.id + "/addWord"}>
-                  <Button icon={<Add />}></Button>
-                </Link>
-              </TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <FlipMove typeName={null}>
-              {words.map((w, index) => (
-                <FunctionalWord
-                  plain={w.plain}
-                  translation={w.translation}
-                  wordCategoryName={w.wordCategory.name}
-                  removeWord={removeWord}
-                  wordId={w.id}
-                  index={index}
-                />
-              ))}
-            </FlipMove>
-          </TableBody>
-        </Table>
-      </Box>
-    </Box>
+    <Fragment>
+      {loading ? (
+        <Loading />
+      ) : (
+        <Box align="center">
+          <Box align="center">
+            <Heading>
+              {t("vocabulary")}: {data.vocabulary.name}
+            </Heading>
+            <Paragraph>{t("Here you can see your added words.")}</Paragraph>
+          </Box>
+          <Box align="center" margin="medium">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell>
+                    {t(`language_${data.vocabulary.plainLanguage.code}`)}
+                  </TableCell>
+                  <TableCell>
+                    {t(`language_${data.vocabulary.translatedLanguage.code}`)}
+                  </TableCell>
+                  <TableCell>{t("word_category")}</TableCell>
+                  <TableCell>
+                    <Link to={"/vocabulary/" + data.vocabulary.id + "/addWord"}>
+                      <Button icon={<Add />}></Button>
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <FlipMove typeName={null}>
+                  {words.map((w, index) => (
+                    <FunctionalWord
+                      plain={w.plain}
+                      translation={w.translation}
+                      wordCategoryName={w.wordCategory.name}
+                      removeWord={removeWord}
+                      wordId={w.id}
+                      index={index}
+                    />
+                  ))}
+                </FlipMove>
+              </TableBody>
+            </Table>
+          </Box>
+        </Box>
+      )}
+    </Fragment>
   );
 };
 
