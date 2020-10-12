@@ -14,6 +14,7 @@ import {
 import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Add } from "grommet-icons";
+import Vocabularies from "./vocabularies";
 
 const HomeContent = () => {
   const { t } = useTranslation();
@@ -48,41 +49,7 @@ const HomeContent = () => {
         {t("Hello")}, {user.given_name ? user.given_name : user.name}!
       </Heading>
       <Paragraph>{t("Today is a good day to learn vocabulary.")}</Paragraph>
-      <Box direction="row" margin={{ vertical: "medium" }}>
-        {vocabularies.length == 0 ? (
-          <Card pad="large">
-            <CardHeader>
-              {t("Let's get started by creating a new vocabulary!")}
-            </CardHeader>
-            <Box align="center">
-              <CardBody pad="medium">
-                <Link to="/newVocabulary">
-                  <Button
-                    primary
-                    icon={<Add />}
-                    label={t("vocabulary_new")}
-                  ></Button>
-                </Link>
-              </CardBody>
-            </Box>
-          </Card>
-        ) : (
-          vocabularies.map((v) => (
-            <Box pad="medium">
-              <Link to={`/vocabulary/${v.id}`}>
-                <Card pad="large" background="brand">
-                  <CardHeader>
-                    <Heading level="3">{v.name}</Heading>
-                  </CardHeader>
-                  <CardBody>
-                    {t("created")}: {v.createdAt}
-                  </CardBody>
-                </Card>
-              </Link>
-            </Box>
-          ))
-        )}
-      </Box>
+      <Vocabularies vocabularies={vocabularies} />
     </Main>
   );
 };
