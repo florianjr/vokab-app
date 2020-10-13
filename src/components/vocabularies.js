@@ -18,8 +18,6 @@ export default function Vocabularies(props) {
   const { t } = useTranslation();
   const size = useContext(ResponsiveContext);
 
-  console.log(size);
-
   if (voc.length == 0) {
     return (
       <Card pad="large">

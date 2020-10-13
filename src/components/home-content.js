@@ -15,11 +15,14 @@ import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Add } from "grommet-icons";
 import Vocabularies from "./vocabularies";
+import useSecureRequest from "../hooks/useSecureRequest";
+import { Loading } from "../components";
 
 const HomeContent = () => {
   const { t } = useTranslation();
   const [vocabularies, setVocabularies] = useState([]);
   const serverUrl = process.env.REACT_APP_SERVER_URL;
+  const { data, loading, error } = useSecureRequest("/vocabulary/");
 
   const { getAccessTokenSilently, user } = useAuth0();
   const history = useHistory();
@@ -44,13 +47,19 @@ const HomeContent = () => {
   }, []);
 
   return (
-    <Main pad="large">
-      <Heading level="1">
-        {t("Hello")}, {user.given_name ? user.given_name : user.name}!
-      </Heading>
-      <Paragraph>{t("Today is a good day to learn vocabulary.")}</Paragraph>
-      <Vocabularies vocabularies={vocabularies} />
-    </Main>
+    <Fragment>
+      {loading ? (
+        <Loading />
+      ) : (
+        <Main pad="large">
+          <Heading level="1">
+            {t("Hello")}, {user.given_name ? user.given_name : user.name}!
+          </Heading>
+          <Paragraph>{t("Today is a good day to learn vocabulary.")}</Paragraph>
+          <Vocabularies vocabularies={vocabularies} />
+        </Main>
+      )}
+    </Fragment>
   );
 };
 
